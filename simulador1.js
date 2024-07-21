@@ -32,6 +32,7 @@ function customForEach(array, callback) {
         callback(array[i], i, array);
     }
 }
+
 //   ------  Historia de usuario 1
 // Função para processar e exibir os dados de repasses do governo
 function processarRepasses(dados) {
@@ -206,6 +207,14 @@ function exibirTratamentosErros(dados) {
 
 // Executa a função com os dados fornecidos
 exibirTratamentosErros(dadosRepassesInvalidos);
+
+//   ------  Historia de usuario 6
+function AjusteEstatisticas(dados) {
+    return dados.filter(repasso => repasso.motivo !== "");
+}
+
+const repassesValidos = AjusteEstatisticas(dados);
+console.log(`------ O total de Repasses válidos ficou: ${repassesValidos.length}`);
 }
 
 // Chamada da função para processar os repasses
