@@ -167,6 +167,45 @@ function MotivoFalhaMaisRepasses(dados) {
 }
 console.log("Motivo de falha com mais repasses:", MotivoFalhaMaisRepasses(dados));
 
+//  ----- Historia de Usuario 5
+function TransacoesSemMotivoOrgao(dados) {
+    return dados.filter(repasso => repasso.status === 'falha' && (repasso.motivo === undefined || repasso.motivo === ""));
+}
+
+// Exibir detalhes das transações com falha e sem motivo
+const transacoesSemMotivo = TransacoesSemMotivoOrgao(dados);
+console.log("Transações que não foram processadas com sucesso:", transacoesSemMotivo);
+
+
+//  ----- Historia de usuario 5
+const dadosRepassesInvalidos = [
+    { "orgao": "MEC", "data": "01/01/2024", "valor": 500.00, "status": "sucesso" },
+    { "orgao": "Ministério da Saúde", "data": "03/01/2024", "valor": 750.00, "status": "sucesso" },
+    { "orgao": "MEC", "data": "05/01/2024", "valor": 1000.00, "status": "sucesso" },
+    { "orgao": "Ministério da Educação", "data": "08/01/2024", "valor": 600.00, "status": "sucesso" },
+    { "orgao": "Ministério da Saúde", "data": "10/01/2024", "valor": 900.00, "status": "sucesso" },
+    { "orgao": "Ministério da Saúde", "data": "10/01/2024", "valor": 600.00, "status": "falha", "motivo": "" },
+    { "orgao": "Ministério da Educação", "data": "12/01/2024", "valor": 300.00, "status": "falha", "motivo": "dados inválidos" },
+    { "orgao": "Ministério da Saúde", "data": "15/01/2024", "valor": 1200.00, "status": "sucesso" },
+    { "orgao": "Ministério da Saúde", "data": "15/01/2024", "valor": 200.00, "status": "falha", "motivo": "" },
+    { "orgao": "MEC", "data": "17/01/2024", "valor": 800.00, "status": "falha", "motivo": "falta de verba" },
+    { "orgao": "Ministério da Educação", "data": "20/01/2024", "valor": 400.00, "status": "falha", "motivo": "falta de limite" },
+    { "orgao": "MEC", "data": "22/01/2024", "valor": 1100.00, "status": "falha" }
+];
+
+function exibirTratamentosErros(dados) {
+    const repassesInvalidos = dados.filter(repasso => 
+        repasso.status === 'falha' && (!repasso.motivo || repasso.motivo.trim() === '')
+    );
+    
+    console.log("------ Detalhes das transações com FALHA e motivo vazio -------");
+    repassesInvalidos.forEach(repasso => {
+        console.log(`Órgão: ${repasso.orgao}, Data: ${repasso.data}, Valor: ${repasso.valor}`);
+    });
+}
+
+// Executa a função com os dados fornecidos
+exibirTratamentosErros(dadosRepassesInvalidos);
 }
 
 // Chamada da função para processar os repasses
