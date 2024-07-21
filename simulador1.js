@@ -1,12 +1,18 @@
 // Dados de repasses do governo (exemplo simplificado)
 const dadosRepasses = [
-    {"orgao": "MEC", "data": "01/01/2024", "valor": 500.00, "status": "sucesso"},
-    {"orgao": "Ministério da Saúde", "data": "03/01/2024", "valor": 750.00, "status": "sucesso"},
-    {"orgao": "MEC", "data": "05/01/2024", "valor": 1000.00, "status": "falha", "motivo": "falta de documentação"},
-    {"orgao": "Ministério da Educação", "data": "08/01/2024", "valor": 600.00, "status": "sucesso"},
-    {"orgao": "Ministério da Saúde", "data": "10/01/2024", "valor": 900.00, "status": "sucesso"},
-    {"orgao": "Ministério da Educação", "data": "12/01/2024", "valor": 300.00, "status": "falha", "motivo": "dados inválidos"},
-    {"orgao": "Ministério da Saúde", "data": "15/01/2024", "valor": 1200.00, "status": "sucesso"}
+    { "orgao": "MEC", "data": "01/01/2024", "valor": 500.00, "status": "sucesso" },
+    { "orgao": "Ministério da Saúde", "data": "03/01/2024", "valor": 750.00, "status": "sucesso" },
+    { "orgao": "MEC", "data": "05/01/2024", "valor": 1000.00, "status": "falha", "motivo": "falta de documentação" },
+    { "orgao": "Ministério da Educação", "data": "08/01/2024", "valor": 600.00, "status": "sucesso" },
+    { "orgao": "Ministério da Saúde", "data": "10/01/2024", "valor": 900.00, "status": "sucesso" },
+    { "orgao": "Ministério da Educação", "data": "12/01/2024", "valor": 300.00, "status": "falha", "motivo": "dados inválidos" },
+    { "orgao": "Ministério da Saúde", "data": "15/01/2024", "valor": 1200.00, "status": "sucesso" },
+    { "orgao": "Ministério da Educação", "data": "15/01/2024", "valor": 600.00, "status": "falha" },
+    { "orgao": "MEC", "data": "17/01/2024", "valor": 800.00, "status": "sucesso" },
+    { "orgao": "MEC", "data": "17/01/2024", "valor": 500.00, "status": "falha", "motivo": "" },
+    { "orgao": "Ministério da Educação", "data": "20/01/2024", "valor": 400.00, "status": "sucesso" },
+    { "orgao": "MEC", "data": "22/01/2024", "valor": 1100.00, "status": "falha", "motivo": "falta de verba" },
+    { "orgao": "Ministério da Educação", "data": "23/01/2024", "valor": 500.00, "status": "falha", "motivo": "dados inválidos" }
 ];
 
 // Função customizada filter
@@ -26,12 +32,13 @@ function customForEach(array, callback) {
         callback(array[i], i, array);
     }
 }
-
+//   ------  Historia de usuario 1
 // Função para processar e exibir os dados de repasses do governo
 function processarRepasses(dados) {
     // Exibir quantidade total de repasses
     console.log(`Total de repasses processados: ${dados.length}`);
 
+//  ----- Historia de Usuario 2
     // Filtrar repasses bem sucedidos e com falha usando as funções customizadas
     const repassesSucesso = customFilter(dados, repasso => repasso.status === 'sucesso');
     const repassesFalha = customFilter(dados, repasso => repasso.status === 'falha');
@@ -81,6 +88,85 @@ function processarRepasses(dados) {
     console.log(`Valor total de repasses com falha: ${resumoFalha.valorTotal}`);
     console.log("Valor total de repasses com falha por órgão:", resumoFalha.valorPorOrgao);
     console.log("Valor total de repasses com falha por motivo:", resumoFalha.valorPorMotivo);
+
+//  ----- Historio de Usuario 3
+function RepasseMaiorValor(dados) {
+    return dados.reduce((maiorRepasso, repasso) => repasso.valor > maiorRepasso.valor ? repasso : maiorRepasso);
+}
+console.log("Detalhes do repasse com maior valor:", RepasseMaiorValor(dados));
+
+function RepasseMenorValor(dados) {
+    return dados.reduce((menorRepasso, repasso) => repasso.valor < menorRepasso.valor ? repasso : menorRepasso);
+}
+console.log("Detalhes do repasse com menor valor:", RepasseMenorValor(dados));
+
+function DiaMaisRepasses(dados) {
+    const repassesPorDia = dados.reduce((acumulador, repasso) => {
+        acumulador[repasso.data] = (acumulador[repasso.data] || 0) + 1;
+        return acumulador;
+    }, {});
+
+    return Object.keys(repassesPorDia).reduce((maxDia, dia) => 
+        repassesPorDia[dia] > repassesPorDia[maxDia] ? dia : maxDia
+    );
+}
+
+console.log("Dia com mais repasses:", DiaMaisRepasses(dados));
+
+function OrgaoMaisRepasses(dados) {
+    const repassesPorOrgao = dados.reduce((acumulador, repasso) => {
+        acumulador[repasso.orgao] = (acumulador[repasso.orgao] || 0) + 1;
+        return acumulador;
+    }, {});
+
+    return Object.keys(repassesPorOrgao).reduce((maxOrgao, orgao) => 
+        repassesPorOrgao[orgao] > repassesPorOrgao[maxOrgao] ? orgao : maxOrgao
+    );
+}
+console.log("Órgão com mais repasses:", OrgaoMaisRepasses(dados));
+
+function OrgaoMaisRepassesSucesso(dados) {
+    const repassesSucessoPorOrgao = dados.reduce((acumulador, repasso) => {
+        if (repasso.status === 'sucesso') {
+            acumulador[repasso.orgao] = (acumulador[repasso.orgao] || 0) + 1;
+        }
+        return acumulador;
+    }, {});
+
+    return Object.keys(repassesSucessoPorOrgao).reduce((maxOrgao, orgao) => 
+        repassesSucessoPorOrgao[orgao] > repassesSucessoPorOrgao[maxOrgao] ? orgao : maxOrgao
+    );
+}
+console.log("Órgão com mais repasses com sucesso:", OrgaoMaisRepassesSucesso(dados));
+
+function OrgaoMaisRepassesFalha(dados) {
+    const repassesFalhaPorOrgao = dados.reduce((acumulador, repasso) => {
+        if (repasso.status === 'falha') {
+            acumulador[repasso.orgao] = (acumulador[repasso.orgao] || 0) + 1;
+        }
+        return acumulador;
+    }, {});
+
+    return Object.keys(repassesFalhaPorOrgao).reduce((maxOrgao, orgao) => 
+        repassesFalhaPorOrgao[orgao] > repassesFalhaPorOrgao[maxOrgao] ? orgao : maxOrgao, Object.keys(repassesFalhaPorOrgao)[0]
+    );
+}
+console.log("Órgão com mais repasses falhados:", OrgaoMaisRepassesFalha(dados));
+
+function MotivoFalhaMaisRepasses(dados) {
+    const falhasPorMotivo = dados.reduce((acumulador, repasso) => {
+        if (repasso.status === 'falha') {
+            acumulador[repasso.motivo] = (acumulador[repasso.motivo] || 0) + 1;
+        }
+        return acumulador;
+    }, {});
+
+    return Object.keys(falhasPorMotivo).reduce((maxMotivo, motivo) => 
+        falhasPorMotivo[motivo] > falhasPorMotivo[maxMotivo] ? motivo : maxMotivo, Object.keys(falhasPorMotivo)[0]
+    );
+}
+console.log("Motivo de falha com mais repasses:", MotivoFalhaMaisRepasses(dados));
+
 }
 
 // Chamada da função para processar os repasses
